@@ -1,14 +1,35 @@
-import socket
-SERVER = "127.0.0.1"
-PORT = 8080
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((SERVER, PORT))
-client.sendall(bytes("This is from Client",'UTF-8'))
+import jpysocket
+host = "127.0.0.1"
+port = 8080
+s=jpysocket.jpysocket() #Create Socket
+s.connect((host,port)) #Connect to socket
 while True:
-  in_data =  client.recv(1024)
-  print("From Server :",in_data.decode())
-  out_data = input()
-  client.sendall(bytes(out_data,'UTF-8'))
-  if out_data=='bye':
-   break
-client.close()
+    in_data =  s.recv(1024)
+    in_data = jpysocket.jpydecode(in_data)
+    print("From Server :",in_data)
+    out_data = input()
+    out_data =  jpysocket.jpyencode(out_data)
+    s.sendall(out_data)
+    if out_data=='bye':
+     break
+    in_data =  s.recv(1024)
+    in_data = jpysocket.jpydecode(in_data)
+    print("From Server :",in_data)
+s.close()
+
+#import jpysocket
+#host='localhost' #Host Name
+#port=8080    #Port Number
+#
+#s=jpysocket.jpysocket() #Create Socket
+#s.connect((host,port)) #Connect to socket
+#while True:
+#    print("Socket Is Connected....")
+#    msgrecv=s.recv(1024) #Recieve msg
+#    msgrecv=jpysocket.jpydecode(msgrecv) #Decript msg
+#    print("From Server: ",msgrecv)
+#    msgsend=jpysocket.jpyencode(input()) #Encript The Msg
+#    s.send(msgsend) #Send Msg
+#     if msgsend=='bye':
+#        break
+#  s.close()
