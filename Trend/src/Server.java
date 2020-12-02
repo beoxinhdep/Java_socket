@@ -79,9 +79,11 @@ class ClientHandler extends Thread
                 // Ask user what he wants 
                 dos.writeUTF("What do you want?[Date | Time]..\n"+ 
                             "Type Exit to terminate connection."); 
-                  
+                System.out.println("What do you want?[Date | Time]..\n"+ 
+                            "Type Exit to terminate connection.");
                 // receive the answer from client 
                 received = dis.readUTF(); 
+                System.out.println(received);
                   
                 if(received.equals("Exit")) 
                 {  
@@ -102,15 +104,18 @@ class ClientHandler extends Thread
                     case "Date" : 
                         toreturn = fordate.format(date); 
                         dos.writeUTF(toreturn); 
+                        System.out.println(toreturn);
                         break; 
                           
                     case "Time" : 
                         toreturn = fortime.format(date); 
                         dos.writeUTF(toreturn); 
+                        System.out.println(toreturn);
                         break; 
                           
                     default: 
-                        dos.writeUTF("Invalid input"); 
+                        dos.writeUTF("Invalid input");
+                        System.out.println("Invalid input");
                         break; 
                 } 
             } catch (IOException e) { 
@@ -121,6 +126,7 @@ class ClientHandler extends Thread
         try
         { 
             // closing resources 
+            this.dos.flush();
             this.dis.close(); 
             this.dos.close(); 
               
@@ -129,3 +135,29 @@ class ClientHandler extends Thread
         } 
     } 
 } 
+//import java.io.*;  
+//import java.net.*; 
+//public class Server {
+//  public static void main(String[] args) throws IOException {
+//       ServerSocket serverSocket = new ServerSocket(8080);
+//       Socket soc = serverSocket.accept();
+//       while (true)  {
+//      try{ 
+//      
+//      System.out.println("Receive new connection: " + soc.getInetAddress());
+//      DataOutputStream dout=new DataOutputStream(soc.getOutputStream());  
+//      DataInputStream in = new DataInputStream(soc.getInputStream());
+//      dout.writeUTF("Thank You For Connecting.");
+//      String msg=(String)in.readUTF();
+//      System.out.println("Client: "+msg);
+//      dout.flush();
+//      dout.close();
+//      }
+//      catch(Exception e)
+//      {
+//               soc.close();
+//                e.printStackTrace(); 
+//  }
+//       }
+//  }
+//  }
