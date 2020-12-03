@@ -129,7 +129,7 @@
                       </Group>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -533,9 +533,9 @@
                 <Property name="text" type="java.lang.String" value="Th&#xea;m t&#x1eeb; kh&#xf3;a"/>
               </Properties>
             </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+            <Component class="org.netbeans.modules.form.InvalidComponent" name="jDateChooser1">
             </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser2">
+            <Component class="org.netbeans.modules.form.InvalidComponent" name="jDateChooser2">
             </Component>
           </SubComponents>
         </Container>
