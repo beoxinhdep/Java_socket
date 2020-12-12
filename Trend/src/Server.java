@@ -6,6 +6,11 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.net.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import org.json.JSONArray;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.dataformat.csv.*;
 
 // Server class 
 public class Server {
@@ -50,6 +55,7 @@ public class Server {
             }
         }
     }
+
 }
 
 // ClientHandler class 
@@ -81,6 +87,7 @@ class ClientHandler extends Thread {
             Scanner scn = new Scanner(System.in);
             InetAddress ip = InetAddress.getByName("localhost");
             Socket s1 = new Socket(ip, 12345);
+//            DataInputStream dis1 = new DataInputStream(new FileInputStream(s1.getInputStream()), 4096));
             DataInputStream dis1 = new DataInputStream(s1.getInputStream());
             DataOutputStream dos1 = new DataOutputStream(s1.getOutputStream());
 
@@ -90,11 +97,14 @@ class ClientHandler extends Thread {
                         + "Type Exit to terminate connection.");
                 // receive the answer from client 
                 received = dis.readUTF();
-                System.out.println("Receive from Java Client:"+received);
+                System.out.println("Receive from Java Client:" + received);
                 //System.out.println(dis.readUTF()); 
                 String tosend = received;
                 dos1.writeUTF(tosend);
-                System.out.println("Send to Python Server:"+tosend);
+                System.out.println("Send to Python Server:" + tosend);
+                String received2 = dis1.readUTF();
+                System.out.println("Receive from Python Server:" + received2);
+                
 
                 // If client sends exit,close this connection  
                 // and then break from the while loop 
@@ -111,35 +121,94 @@ class ClientHandler extends Thread {
 //                        System.out.println("Connection closed");
 //                        break;
 //                    }
+//                String line = "";  
+//                String splitBy = ",";
+//                String[] result = null;
+//                
+//                
+//                try {
+//                File file = new File("C:/Users/Admin/Desktop/Java_socket/Trend/src/search_trends.csv");
+//                FileReader fr = new FileReader(file);
+//                BufferedReader br = new BufferedReader(fr);
+////                String[] tempArr;
+////                List<String> myList = new ArrayList<String>();
+////                while((line = br.readLine()) != null) {
+////                   tempArr = line.split(",");
+////                   for(String tempStr : tempArr) {
+////                      System.out.print(tempStr + " ");
+////                      myList.add(tempStr);
+////                   }
+////                   
+////                   System.out.println();
+////                }
+//                 
+//                 dos.writeUTF(br.toString());
+//                br.close();
+//                } catch(IOException ioe) {
+//                   ioe.printStackTrace();
+//                }
+
+                    File input = new File("C:/Users/Admin/Desktop/Java_socket/Trend/src/search_trends.csv");
+                          try {
+                             CsvSchema csv = CsvSchema.emptySchema().withHeader();
+                             CsvMapper csvMapper = new CsvMapper();
+                             MappingIterator<Map<?, ?>> mappingIterator =  csvMapper.reader().forType(Map.class).with(csv).readValues(input);
+                             List<Map<?, ?>> list = mappingIterator.readAll();
+                            dos.writeUTF(list.toString());
+                          } catch(Exception e) {
+                             e.printStackTrace();
+                          }
+
+
+
+
+//                try   
+//                {  
+//                    Scanner sc = new Scanner(new File("C:\\Users\\Admin\\Desktop\\Java_socket\\Trend\\src\\search_trends.csv"));  
+//                    sc.useDelimiter(",");   //sets the delimiter pattern  
+//                    while (sc.hasNext())  //returns a boolean value  
+//                    {  
+//                    System.out.print(sc.next());  //find and returns the next complete token from this scanner  
+//                    }   
+//                    sc.close();  //closes the scanner  S
+//                    }  
+//                catch (IOException e)   
+//                {  
+//                e.printStackTrace();  
+//                }  
+
+
+
                 // printing date or time as requested by client 
-                String received2 = dis1.readUTF();
-                System.out.println("Receive from Python Server:"+received2);
+                
+                //System.out.println("Send to Java Client:" + employee[0]);
 
                 // creating Date object 
-                Date date = new Date();
-
+//                Date date = new Date();
                 // write on output stream based on the 
                 // answer from the client 
-                switch (received) {
-
-                    case "Date":
-                        toreturn = fordate.format(date);
-                        dos.writeUTF(toreturn);
-
-                        break;
-
-                    case "Time":
-                        toreturn = fortime.format(date);
-                        dos.writeUTF(toreturn);
-
-                        break;
-
-                    default:
-                        dos.writeUTF("Invalid input");
-                        break;
-                }
+//                switch (received) {
+//
+//                    case "Date":
+//                        toreturn = fordate.format(date);
+//                        dos.writeUTF(toreturn);
+//                        System.out.println("Send to Java Client:"+toreturn);
+//
+//                        break;
+//
+//                    case "Time":
+//                        toreturn = fortime.format(date);
+//                        dos.writeUTF(toreturn);
+//                        System.out.println("Send to Java Client:"+toreturn);
+//
+//                        break;
+//
+//                    default:
+//                        dos.writeUTF("Invalid input");
+//                        System.out.println("Send to Java Client:"+"Invalid input");
+//                        break;
+//                }
             }
-            
 
         } catch (Exception e) {
             e.printStackTrace();
